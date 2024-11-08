@@ -3,13 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.API", "Banking.API\Banking.API.csproj", "{83D18D2F-CA70-449E-8734-7064BA87D978}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banking.API", "Banking.API\Banking.API.csproj", "{83D18D2F-CA70-449E-8734-7064BA87D978}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Application", "Banking.Application\Banking.Application.csproj", "{F0464885-7005-45E9-B190-793818C177C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banking.Application", "Banking.Application\Banking.Application.csproj", "{F0464885-7005-45E9-B190-793818C177C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Domain", "Banking.Domain\Banking.Domain.csproj", "{E4879691-D4D2-4C25-86F6-148948D772C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banking.Domain", "Banking.Domain\Banking.Domain.csproj", "{E4879691-D4D2-4C25-86F6-148948D772C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Infrastructure", "Banking.Infrastructure\Banking.Infrastructure.csproj", "{C8353EA0-6720-498D-AC93-E3D3FB594A19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banking.Infrastructure", "Banking.Infrastructure\Banking.Infrastructure.csproj", "{C8353EA0-6720-498D-AC93-E3D3FB594A19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapr", "dapr", "{7DDBEF82-77FD-428C-99F0-DA3077ADDF66}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{014B5CC9-56AD-4291-A1E2-BF4E83EF6631}"
+	ProjectSection(SolutionItems) = preProject
+		dapr\components\pubsub.withdrawal.yaml = dapr\components\pubsub.withdrawal.yaml
+		dapr\components\pubsub.yaml = dapr\components\pubsub.yaml
+	EndProjectSection
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{CAA91C18-25C0-4758-8CC7-CFB490FD8012}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +43,16 @@ Global
 		{C8353EA0-6720-498D-AC93-E3D3FB594A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8353EA0-6720-498D-AC93-E3D3FB594A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8353EA0-6720-498D-AC93-E3D3FB594A19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAA91C18-25C0-4758-8CC7-CFB490FD8012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAA91C18-25C0-4758-8CC7-CFB490FD8012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAA91C18-25C0-4758-8CC7-CFB490FD8012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAA91C18-25C0-4758-8CC7-CFB490FD8012}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{014B5CC9-56AD-4291-A1E2-BF4E83EF6631} = {7DDBEF82-77FD-428C-99F0-DA3077ADDF66}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7997D772-0690-42DA-BA72-932F5FC23AFB}

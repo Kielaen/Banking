@@ -9,6 +9,9 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["Banking.Application/Banking.Application.csproj", "Banking.Application/"]
+COPY ["Banking.Infrastructure/Banking.Infrastructure.csproj", "Banking.Infrastructure/"]
+COPY ["Banking.Domain/Banking.Domain.csproj", "Banking.Domain/"]
 COPY ["Banking.API/Banking.API.csproj", "Banking.API/"]
 RUN dotnet restore "./Banking.API/Banking.API.csproj"
 COPY . .
