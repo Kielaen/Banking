@@ -8,6 +8,10 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      retries: 5
 
   zipkin:
     image: openzipkin/zipkin-slim
@@ -37,6 +41,6 @@ services:
     volumes:
       - ./dapr/components:/components
     depends_on:
-      - rabbitmq
-      - banking-api
+      rabbitmq:
+         condition: service_healthy
     network_mode: service:banking-api
