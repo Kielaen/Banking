@@ -1,4 +1,5 @@
-﻿using Dapr;
+﻿using Banking.Domain.Models.Events;
+using Dapr;
 
 namespace Banking.Application.Services.PubSub;
 
@@ -7,8 +8,9 @@ namespace Banking.Application.Services.PubSub;
 /// </summary>
 public interface IEventPublisher
 {
-    Task PublishEventAsync(
-        CloudEvent cloudEvent,
+    Task PublishEventAsync<T>(
+        T cloudEvent,
+        string topic,
         Guid CorrelationId,
         CancellationToken cancellationToken);
 }

@@ -1,4 +1,6 @@
 ﻿using Banking.Application.Services.Account;
+using Banking.Domain.Configs;
+using Banking.Domain.Models.Events;
 using Microsoft.Extensions.Logging;
 
 namespace Banking.Infrastructure.Services.Account;
@@ -20,29 +22,39 @@ public class AccountService : IAccountService
     }
 
     /// <inheritdoc/>
-    public async Task<(bool Success, string Message)> WithdrawAsync(
-        long accountId, 
-        decimal amount, 
-        Guid correlationId, 
+    public async Task<WithdrawalResponse> WithdrawAsync(
+        WithdrawalEvent withdrawal,
+        Guid correlationId,
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        _logger.LogDebug("WithdrawAsync start. Account: {AccountId}. CorrelationId: {CorrelationId}", accountId, correlationId);
+        _logger.LogDebug("WithdrawAsync start. Account: {AccountId}. CorrelationId: {CorrelationId}", withdrawal.AccountId, correlationId);
 
-        decimal balance = await GetBalanceAsync(accountId);
-        if (balance < amount)
+        var balance = await GetBalanceAsync(withdrawal.AccountId);
+        if (balance < withdrawal.Amount)
         {
-            return (false, "Insufficient funds");
+            return WithdrawalResponse.CreateWithdrawalResponse(withdrawal, balance, false, MessageConstants.InsufficientFunds);
         }
 
-        bool updateSuccess = await UpdateBalanceAsync(accountId, amount);
+        var withdrawalResponse = UpdateBalanceAsync(withdrawal, balance);
 
-        _logger.LogDebug("WithdrawAsync end. Account: {AccountId}. CorrelationId: {CorrelationId}", accountId, correlationId);
+        _logger.LogDebug("WithdrawAsync end. Account: {AccountId}. CorrelationId: {CorrelationId}", withdrawal.AccountId, correlationId);
 
-        return updateSuccess ? (true, "Withdrawal successful") : (false, "Withdrawal failed");
+        return withdrawalResponse;
     }
 
     private static Task<decimal> GetBalanceAsync(long accountId) => Task.FromResult(1000m);
-    private static Task<bool> UpdateBalanceAsync(long accountId, decimal amount) => Task.FromResult(true);
+    private static WithdrawalResponse UpdateBalanceAsync(WithdrawalEvent withdrawal, decimal balance)
+    {
+        try
+        {
+            var remainingBalance = balance - withdrawal.Amount;
+            return WithdrawalResponse.CreateWithdrawalResponse(withdrawal, remainingBalance, true, MessageConstants.WithdrawalSuccessful);
+        }
+        catch
+        {
+            return WithdrawalResponse.CreateWithdrawalResponse(withdrawal, balance, false, MessageConstants.WithdrawalFailed);
+        }
+    }
 }

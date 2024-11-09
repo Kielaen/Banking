@@ -1,4 +1,6 @@
 ﻿using Banking.Application.Services.PubSub;
+using Banking.Domain.Configs;
+using Banking.Domain.Models.Events;
 using Dapr;
 using Dapr.Client;
 using Microsoft.Extensions.Logging;
@@ -24,8 +26,9 @@ public class EventPublisher : IEventPublisher
     }
 
     /// <inheritdoc/>
-    public async Task PublishEventAsync(
-        CloudEvent cloudEvent, 
+    public async Task PublishEventAsync<T>(
+        T cloudEvent, 
+        string topic,
         Guid CorrelationId, 
         CancellationToken cancellationToken)
     {
@@ -33,7 +36,7 @@ public class EventPublisher : IEventPublisher
 
         _logger.LogDebug("PublishEventAsync start. CorrelationId: {CorrelationId}", CorrelationId);
 
-        await _daprClient.PublishEventAsync("pubsub", "topic", cloudEvent, cancellationToken);
+        await _daprClient.PublishEventAsync(DaprComponents.PubSub, topic, cloudEvent, cancellationToken);
 
         _logger.LogDebug("PublishEventAsync end. CorrelationId: {CorrelationId}", CorrelationId);
     }

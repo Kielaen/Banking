@@ -9,4 +9,9 @@ public class PubSubConfig
     /// The topic for all withdrawals.
     /// </summary>
     public const string WithdrawalTopic = "ALL_WITHDRAWALS";
+
+    /// <summary>
+    /// The topic for all withdrawal responses.
+    /// </summary>
+    public const string WithdrawalResponseTopic = "ALL_WITHDRAWAL_RESPONSE";
 }

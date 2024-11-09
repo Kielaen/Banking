@@ -1,16 +1,13 @@
 services:
   rabbitmq:
     image: rabbitmq:3-management
+    container_name: rabbitmq
     ports:
-      - "5672:5672"      # Default RabbitMQ port for message broker
-      - "15672:15672"    # RabbitMQ management UI
+      - "5672:5672"     
+      - "15672:15672"    
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
-    
-     #######################
-     #       Zipkin        #
-     #######################
 
   zipkin:
     image: openzipkin/zipkin-slim
@@ -18,24 +15,21 @@ services:
     ports:
       - "9411:9411"
 
-
   banking-api:      
     image: bankingapi:dev
     build:
        context: .
        dockerfile: Banking.API/Dockerfile
-    ports:
-      - "5000:5000"
+    environment:
+       - ASPNETCORE_URLS=http://+:5000
     depends_on:
-      - dapr
-    networks:
-      - app-network
+      - rabbitmq
 
   dapr:
     image: daprio/dapr:latest
     command: [
       "./daprd",
-      "-app-id", "bankingapi",
+      "-app-id", "banking-api",
       "-app-port", "5000",
       "-dapr-http-port", "3500",
       "-components-path", "/components"
@@ -44,22 +38,5 @@ services:
       - ./dapr/components:/components
     depends_on:
       - rabbitmq
-    networks:
-      - app-network
-
-  # bankingapi:
-  #   build:
-  #     context: .
-  #     dockerfile: Banking.API/Dockerfile
-  #   environment:
-  #     ASPNETCORE_ENVIRONMENT: "Development"
-  #   ports:
-  #     - "5000:5000"
-  #   depends_on:
-  #     - dapr
-  #   networks:
-  #     - app-network
-
-networks:
-  app-network:
-    driver: bridge
+      - banking-api
+    network_mode: service:banking-api
